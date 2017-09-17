@@ -128,6 +128,17 @@ namespace HotelTest.Domain.Services
         /// <returns></returns>
         public async Task<List<Room>> SearchAsync(RoomSearchModel model)
         {
+            if (model == null)
+            {
+                throw new NullReferenceException($"Ссылка на модель указывает на null.");
+            }
+
+            if (model.MinPeoplecount >= model.MaxPeopleCount)
+            {
+                throw new ArgumentException(
+                    $"Минимум не может быть больше или равен максимуму({model.MinPeoplecount}>!{model.MaxPeopleCount})");
+            }
+
             //Нужно для проверки на тип комнаты
             var list = new List<RoomOptions>();
             if (model.IsStandart)
@@ -143,26 +154,12 @@ namespace HotelTest.Domain.Services
                 list.Add(RoomOptions.Lux);
             }
 
-            //Нужно для проверки на вместимость
-            var min = 0;
-            var max = 0;
-            if (model.MinPeoplecount >= model.MaxPeopleCount)
-            {
-                throw new ArgumentException(
-                    $"Минимум не может быть больше или равен максимуму({model.MinPeoplecount}>!{model.MaxPeopleCount})");
-            }
-            else
-            {
-                min = model.MinPeoplecount;
-                max = model.MaxPeopleCount;
-                if (max == 0)
-                {
-                    max = 100;
-                }
-            }
+            var min = model.MinPeoplecount;
+            var max = model.MaxPeopleCount;
+
             var result = Rooms.Where(x => x.IsFree
-                             && x.MaxCount >= min
-                             && x.MaxCount <= max);
+                                          && x.MaxCount >= min
+                                          && x.MaxCount <= max);
             //Елси хотя бы 1 критерий выбран, то так же ищем по типу номера
             if (model.IsStandart || model.IsHalfLux || model.IsLux)
             {

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace HotelTest.Domain.Entities
 {
     /// <summary>
-    /// Класс представляющий запись поситителя
+    /// Класс представляющий запись посетителя
     /// </summary>
     public class Visitor
     {

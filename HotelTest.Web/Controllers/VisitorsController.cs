@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using HotelTest.Domain.Entities;
 using HotelTest.Domain.Interfaces;
 using HotelTest.Domain.Models;
 using HotelTest.Web.Extensions;
@@ -25,6 +26,14 @@ namespace HotelTest.Web.Controllers
             _visitorService = visitorService;
         }
 
+        //Отображает посетителей
+        [HttpGet]
+        public async Task<object> GetVisitors()
+        {
+            var result = await _visitorService.GetAsync();
+            return result.Select(x => x?.VisitorView());
+        }
+
         //Добавляет запись в бд
         [HttpPost]
         public async Task<object> AddVisitor ([FromQuery] int idRoom,
@@ -40,19 +49,19 @@ namespace HotelTest.Web.Controllers
             return await _visitorService.DepartureAsync(idVisitor, model);
         }
 
-        //Записывает дату выезда и возвращает цену за проживание
+        //Изменяет запись о посетителе
         [HttpPut]
         public async Task EditVisitors([FromQuery] Guid idVisitor, [FromBody]VisitorEditModel model)
         {
              await _visitorService.EditAsync(idVisitor, model);
         }
 
-        //Отображает посетителей
-        [HttpGet]
-        public async Task<object> GetVisitors()
+        //Удаляет запись по Id
+        [HttpDelete]
+        [Authorize(Roles = nameof(RolesOptions.Admin))]
+        public async Task DeleteVisitor([FromQuery] Guid idVisitor)
         {
-            var result = await _visitorService.GetAsync();
-            return result.Select(x => x?.VisitorView());
+             await _visitorService.DeleteAsync(idVisitor);
         }
     }
 }

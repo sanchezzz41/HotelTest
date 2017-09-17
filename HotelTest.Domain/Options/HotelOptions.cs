@@ -27,6 +27,6 @@ namespace HotelTest.Domain.Options
         /// <summary>
         /// Цена за люкс комнату(по умолчанию 3)
         /// </summary>
-        public int PriceForLux { get; set; } = 1;
+        public int PriceForLux { get; set; } = 3;
     }
 }

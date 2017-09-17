@@ -32,7 +32,9 @@ namespace HotelTest.Domain.Services
         //Настрокйи для отеля
         private readonly HotelOptions _hotelOptions;
 
-        //Словарь для сопоставления типа комнаты и её цены
+        /// <summary>
+        /// Словарь для сопоставления типа комнаты и её цены
+        /// </summary>
         private readonly Dictionary<RoomOptions, int> _prices;
 
         public VisitorService(DatabaseContext context, IRoomService roomService, IUserService userService,
@@ -52,7 +54,7 @@ namespace HotelTest.Domain.Services
         }
 
         /// <summary>
-        /// Добавляет запись о заселение поситителей
+        /// Добавляет запись о заселение посетителей
         /// </summary>
         /// <param name="idRoom">Id комнаты</param>
         /// <param name="idUser">Id пользователя</param>
@@ -82,7 +84,7 @@ namespace HotelTest.Domain.Services
         }
 
         /// <summary>
-        /// Изменяет запись о поситители
+        /// Изменяет запись о посетители
         /// </summary>
         /// <param name="idVisitor">Id записи</param>
         /// <param name="model">Модель</param>
@@ -99,9 +101,11 @@ namespace HotelTest.Domain.Services
             {
                 throw new NullReferenceException($"Записи с таким id:{idVisitor} нету.");
             }
+            var resultUser = await _userService.FindByIdAsync(model.UserId);
+            var resultRoom = await _roomService.FindByIdAsync(model.RoomId);
 
-            resultVisitor.RoomId = model.RoomId;
-            resultVisitor.UserId = model.UserId;
+            resultVisitor.RoomId = resultRoom.Id;
+            resultVisitor.UserId = resultUser.Id;
             resultVisitor.ArrivalDate = model.ArrivalDate;
             resultVisitor.DateOfDeparture = model.DateOfDeparture;
 
@@ -124,8 +128,18 @@ namespace HotelTest.Domain.Services
             {
                 throw new NullReferenceException($"Записи с таким id:{idVisitor} нету.");
             }
+            if (resultVisitor.ArrivalDate > model.Date)
+            {
+                throw new ArgumentException($"Дата выезда({model.Date}) меньше чем дата въезда({resultVisitor.ArrivalDate}).");
+            }
+
+            if (resultVisitor.Room.IsFree)
+            {
+                throw new ArgumentException($"Комната свободна, и оттуда некому пока выезжать.");
+            }
 
             resultVisitor.DateOfDeparture = model.Date;
+
             //Освобождаем комнату
             resultVisitor.Room.IsFree = true;
 
@@ -133,6 +147,7 @@ namespace HotelTest.Domain.Services
             var days = resultVisitor.DateOfDeparture.DayOfYear - resultVisitor.ArrivalDate.DayOfYear;
             var peopleCount = resultVisitor.Room.MaxCount;
             var priceForType = _prices[resultVisitor.Room.RoomOptionId];
+
             //Формула для подсчёта сцены(почти произвольная)
             var resultPrice = peopleCount * priceForType + days * priceForType;
 
@@ -141,6 +156,22 @@ namespace HotelTest.Domain.Services
             await _context.SaveChangesAsync();
 
             return resultPrice;
+        }
+
+        /// <summary>
+        /// Удаляет запись по Id
+        /// </summary>
+        /// <param name="idVisitor"></param>
+        /// <returns></returns>
+        public async Task DeleteAsync(Guid idVisitor)
+        {
+            var resultVisitor = Visitors.SingleOrDefault(x => x.Id == idVisitor);
+            if (resultVisitor == null)
+            {
+                throw new NullReferenceException($"Записи с таким id:{idVisitor} нету.");
+            }
+            _context.Visitors.Remove(resultVisitor);
+            await _context.SaveChangesAsync();
         }
 
         /// <summary>

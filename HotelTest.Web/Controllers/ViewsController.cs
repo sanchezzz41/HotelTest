@@ -52,13 +52,6 @@ namespace HotelTest.Web.Controllers
             return result.Select(x => x?.VisitorView());
         }
 
-        //Ищет комнаты
-        [HttpPost("Search")]
-        public async Task<object> GetVisitors([FromBody] RoomSearchModel model)
-        {
-            var resultList = await _roomService.SearchAsync(model);
-            return resultList.Select(x => x?.RoomView());
-        }
 
     }
 }
