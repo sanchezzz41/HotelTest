@@ -27,6 +27,7 @@ namespace HotelTest.Domain
             service.AddScoped<IUserService, UserService>();
             service.AddScoped<IAuthorizationService, AuthorizationService>();
             service.AddScoped<IRoomService, RoomService>();
+            service.AddScoped<IVisitorService, VisitorService>();
             return service;
         }
     }

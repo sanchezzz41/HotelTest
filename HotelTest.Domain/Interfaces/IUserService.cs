@@ -43,5 +43,12 @@ namespace HotelTest.Domain.Interfaces
         /// </summary>
         /// <returns></returns>
         Task<List<User>> GetAsync();
+
+        /// <summary>
+        /// Возвращает пользователя по id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<User> FindByIdAsync(Guid id);
     }
 }

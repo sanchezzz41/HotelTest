@@ -47,10 +47,10 @@ namespace HotelTest.Domain.Services
                 throw new NullReferenceException("Ссылка указывает на null.");
             }
 
-            var checkOnEmail = await _context.Users.SingleOrDefaultAsync(x => x.Email == userModel.Email);
-            if (checkOnEmail != null)
+            var checkOnEmail = await _context.Users.AnyAsync(x => x.Email == userModel.Email);
+            if (checkOnEmail)
             {
-                throw new ArgumentException($"Пользователь с таким мылом {userModel.Email} уже существует.");
+                throw new ArgumentException($"Пользователь с таким мылом: {userModel.Email} уже существует.");
             }
 
             var passwordSalt = Randomizer.GetString(10);
@@ -74,7 +74,27 @@ namespace HotelTest.Domain.Services
         /// <returns></returns>
         public async Task EditAsync(Guid id, UserEditModel userModel)
         {
-            //TODO: Доделать
+            if (userModel == null)
+            {
+                throw new NullReferenceException("Ссылка указывает на null.");
+            }
+
+            var resultUser = await _context.Users.SingleOrDefaultAsync(x => x.Id == id);
+            if (resultUser == null)
+            {
+                throw new NullReferenceException($"Пользователя с таким id: {id} не существует!");
+            }
+            var checkOnEmail = await _context.Users.AnyAsync(x => x.Email == userModel.Email);
+            if (checkOnEmail)
+            {
+                throw new ArgumentException($"Пользователь с таким мылом: {userModel.Email} уже существует.");
+            }
+
+            resultUser.Email = userModel.Email;
+            resultUser.Fio = userModel.Fio;
+            resultUser.PhoneNumber = userModel.PhoneNumber;
+
+            await _context.SaveChangesAsync();
         }
 
 
@@ -88,7 +108,7 @@ namespace HotelTest.Domain.Services
             var resultUser = await _context.Users.SingleOrDefaultAsync(x => x.Id == id);
             if (resultUser == null)
             {
-                throw new NullReferenceException($"Пользователя с {id} не существует!");
+                throw new NullReferenceException($"Пользователя с таким id: {id} не существует!");
             }
             _context.Users.Remove(resultUser);
 
@@ -103,10 +123,23 @@ namespace HotelTest.Domain.Services
         {
             return await _context.Users
                 .Include(x => x.Role)
-                .Include(x=>x.Visitors)
+                .Include(x => x.Visitors)
                 .ToListAsync();
         }
 
-     
+        /// <summary>
+        /// Возвращает пользователя по id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<User> FindByIdAsync(Guid id)
+        {
+            var resultUser = await _context.Users.SingleOrDefaultAsync(x => x.Id == id);
+            if (resultUser == null)
+            {
+                throw new NullReferenceException($"Пользователя с таким id: {id} не существует!");
+            }
+            return resultUser;
+        }
     }
 }

@@ -63,6 +63,9 @@ namespace HotelTest.Web
                 x =>
                 {
                     x.RoomCount = 100;
+                    x.PriceForStandard = 500;
+                    x.PriceForHalfLux = 1000;
+                    x.PriceForLux = 5000;
                 }
             );
 

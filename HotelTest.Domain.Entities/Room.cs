@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Net;
 
 namespace HotelTest.Domain.Entities
 {
@@ -28,12 +27,6 @@ namespace HotelTest.Domain.Entities
         /// </summary>
         [Required]
         public bool IsFree { get; set; }
-
-        /// <summary>
-        /// Цена за комнату
-        /// </summary>
-        [Required]
-        public int Price { get; set; }
 
         /// <summary>
         /// Тип комнаты
@@ -64,12 +57,11 @@ namespace HotelTest.Domain.Entities
         /// <param name="price">Цена за комнату</param>
         /// <param name="roomOption">Тип комнаты</param>
         /// <param name="isFree">Свободна ли комната</param>
-        public Room(int id, int maxCount, bool isFree, int price, RoomOptions roomOption)
+        public Room(int id, int maxCount, bool isFree, RoomOptions roomOption)
         {
             Id = id;
             MaxCount = maxCount;
             IsFree = isFree;
-            Price = price;
             RoomOptionId = roomOption;
         }
     }

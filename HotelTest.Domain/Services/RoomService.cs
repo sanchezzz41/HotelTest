@@ -55,12 +55,17 @@ namespace HotelTest.Domain.Services
                 number = await _context.Rooms.MaxAsync(x => x.Id);
                 number++;
             }
+            if (number > _options.RoomCount)
+            {
+                throw new InvalidOperationException($"Вы больше не можете добавить комнаты в оттель, " +
+                                                    $"так как маскимальное кол-во комнат {_options.RoomCount}, а вы уже добавляете {number}.");
+            }
 
-            var resultRoom = new Room(number, model.MaxCount, model.IsFree,model.Price, model.RoomOptionId);
+            var resultRoom = new Room(number, model.MaxCount, model.IsFree, model.RoomOptionId);
 
             await _context.Rooms.AddAsync(resultRoom);
             await _context.SaveChangesAsync();
-            
+
             return resultRoom.Id;
         }
 
@@ -80,13 +85,12 @@ namespace HotelTest.Domain.Services
             var resultRoom = await _context.Rooms.SingleOrDefaultAsync(x => x.Id == idRoom);
             if (resultRoom == null)
             {
-                throw new NullReferenceException($"Комнаты с таким id {idRoom} нету.");
+                throw new NullReferenceException($"Комнаты с таким id: {idRoom} нету.");
             }
 
             resultRoom.RoomOptionId = model.RoomOptionId;
             resultRoom.IsFree = model.IsFree;
             resultRoom.MaxCount = model.MaxCount;
-            resultRoom.Price = model.Price;
 
             await _context.SaveChangesAsync();
         }
@@ -100,7 +104,71 @@ namespace HotelTest.Domain.Services
             return await _context.Rooms
                 .Include(x => x.Visitors)
                 .Include(x => x.TypeRoom)
-                .ToListAsync(); 
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// Возвращает комнату по Id
+        /// </summary>
+        /// <returns></returns>
+        public async Task<Room> FindByIdAsync(int id)
+        {
+            var resultRoom = await _context.Rooms.SingleOrDefaultAsync(x => x.Id == id);
+            if (resultRoom == null)
+            {
+                throw new NullReferenceException($"Комнаты с таким id: {id} нету.");
+            }
+            return resultRoom;
+        }
+
+        /// <summary>
+        /// Осуществляет поиск по полям, заданным в модели
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<List<Room>> SearchAsync(RoomSearchModel model)
+        {
+            //Нужно для проверки на тип комнаты
+            var list = new List<RoomOptions>();
+            if (model.IsStandart)
+            {
+                list.Add(RoomOptions.Standard);
+            }
+            if (model.IsHalfLux)
+            {
+                list.Add(RoomOptions.HalfLux);
+            }
+            if (model.IsLux)
+            {
+                list.Add(RoomOptions.Lux);
+            }
+
+            //Нужно для проверки на вместимость
+            var min = 0;
+            var max = 0;
+            if (model.MinPeoplecount >= model.MaxPeopleCount)
+            {
+                throw new ArgumentException(
+                    $"Минимум не может быть больше или равен максимуму({model.MinPeoplecount}>!{model.MaxPeopleCount})");
+            }
+            else
+            {
+                min = model.MinPeoplecount;
+                max = model.MaxPeopleCount;
+                if (max == 0)
+                {
+                    max = 100;
+                }
+            }
+            var result = Rooms.Where(x => x.IsFree
+                             && x.MaxCount >= min
+                             && x.MaxCount <= max);
+            //Елси хотя бы 1 критерий выбран, то так же ищем по типу номера
+            if (model.IsStandart || model.IsHalfLux || model.IsLux)
+            {
+                result = result.Where(x => list.Contains(x.RoomOptionId));
+            }
+            return result.ToList();
         }
     }
 }

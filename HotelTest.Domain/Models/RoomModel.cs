@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 using HotelTest.Domain.Entities;
 
 namespace HotelTest.Domain.Models
@@ -24,11 +20,6 @@ namespace HotelTest.Domain.Models
         [Required]
         public bool IsFree { get; set; }
 
-        /// <summary>
-        /// Цена за комнату
-        /// </summary>
-        [Required]
-        public int Price { get; set; }
 
 
         /// <summary>

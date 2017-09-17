@@ -38,6 +38,18 @@ namespace HotelTest.Domain.Interfaces
         /// <returns></returns>
         Task<List<Room>> GetAsync();
 
+        /// <summary>
+        /// Возвращает комнату по Id
+        /// </summary>
+        /// <returns></returns>
+        Task<Room> FindByIdAsync(int id);
+
+        /// <summary>
+        /// Осуществляет поиск по полям, заданным в модели
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        Task<List<Room>> SearchAsync(RoomSearchModel model);
 
     }
 }
