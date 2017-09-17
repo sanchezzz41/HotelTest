@@ -12,9 +12,10 @@ using System;
 namespace HotelTest.Web.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20170917082923_EditRoomId")]
+    partial class EditRoomId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,8 +40,6 @@ namespace HotelTest.Web.Migrations
                     b.Property<bool>("IsFree");
 
                     b.Property<int>("MaxCount");
-
-                    b.Property<int>("Price");
 
                     b.Property<int>("RoomOptionId");
 

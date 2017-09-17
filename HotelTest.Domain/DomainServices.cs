@@ -1,4 +1,6 @@
-﻿using HotelTest.Domain.Interfaces;
+﻿using System;
+using HotelTest.Domain.Interfaces;
+using HotelTest.Domain.Options;
 using HotelTest.Domain.Services;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,10 +16,17 @@ namespace HotelTest.Domain
         /// </summary>
         /// <param name="service"></param>
         /// <returns></returns>
-        public static IServiceCollection AddDomainServices(this IServiceCollection service)
+        public static IServiceCollection AddDomainServices(this IServiceCollection service, Action<HotelOptions> opt)
         {
+
+            var options = new HotelOptions();
+            opt(options);
+
+            service.AddSingleton(options);
+
             service.AddScoped<IUserService, UserService>();
             service.AddScoped<IAuthorizationService, AuthorizationService>();
+            service.AddScoped<IRoomService, RoomService>();
             return service;
         }
     }

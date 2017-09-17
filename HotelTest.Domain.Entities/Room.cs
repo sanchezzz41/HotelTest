@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Net;
 
 namespace HotelTest.Domain.Entities
 {
@@ -11,17 +13,27 @@ namespace HotelTest.Domain.Entities
         /// </summary>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public uint Id { get; set; }
+        [Range(0, Int32.MaxValue)]
+        public int Id { get; set; }
 
         /// <summary>
-        /// Максимальное количество людей в комнате
+        /// Максимальное количество людей,которые могут проживать в комнате
         /// </summary>
-        public uint MaxCount { get; set; }
+        [Range(0, Int32.MaxValue)]
+        [Required]
+        public int MaxCount { get; set; }
 
         /// <summary>
         /// Свободна ли комната(true = свободна)
         /// </summary>
+        [Required]
         public bool IsFree { get; set; }
+
+        /// <summary>
+        /// Цена за комнату
+        /// </summary>
+        [Required]
+        public int Price { get; set; }
 
         /// <summary>
         /// Тип комнаты
@@ -38,5 +50,27 @@ namespace HotelTest.Domain.Entities
         /// Записи
         /// </summary>
         public List<Visitor> Visitors { get; set; }
+
+        public Room()
+        {
+
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id">Номер комнаты</param>
+        /// <param name="maxCount">Максимальное число людей, которые могут проживать в комнате</param>
+        /// <param name="price">Цена за комнату</param>
+        /// <param name="roomOption">Тип комнаты</param>
+        /// <param name="isFree">Свободна ли комната</param>
+        public Room(int id, int maxCount, bool isFree, int price, RoomOptions roomOption)
+        {
+            Id = id;
+            MaxCount = maxCount;
+            IsFree = isFree;
+            Price = price;
+            RoomOptionId = roomOption;
+        }
     }
 }

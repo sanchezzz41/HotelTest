@@ -7,16 +7,16 @@ namespace HotelTest.Domain.Entities
     public enum RoomOptions
     {
         /// <summary>
-        /// Стандартная комната(цена 1000)
+        /// Стандартная комната
         /// </summary>
-        Standard = 1000,
+        Standard,
         /// <summary>
-        /// Полу-люкс комната(цена 2000)
+        /// Полу-люкс комната
         /// </summary>
-        HalfLux = 2000,
+        HalfLux,
         /// <summary>
-        /// Люкс комната(цена 3000)
+        /// Люкс комната
         /// </summary>
-        Lux = 3000
+        Lux
     }
 }

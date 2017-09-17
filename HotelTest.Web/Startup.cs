@@ -22,6 +22,10 @@ namespace HotelTest.Web
         }
 
         public IConfiguration Configuration { get; }
+
+        /// <summary>
+        /// Сервисы(нужно что бы бд иницилизировать)
+        /// </summary>
         private IServiceProvider ServiceProvider { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -33,7 +37,7 @@ namespace HotelTest.Web
                     assemb => assemb.MigrationsAssembly("HotelTest.Web"));
             });
 
-            //Сервисы для аутификации и валидации пароля
+            //Сервисы для аутификации пользователя и валидации пароля
             services.AddScoped<IHashProvider, Md5HashService>();
             services.AddScoped<IPasswordHasher<User>, Md5PasswordHasher>();
 
@@ -51,13 +55,18 @@ namespace HotelTest.Web
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+                c.SwaggerDoc("v1", new Info {Title = "My API", Version = "v1"});
             });
 
             //Добавление сервисов из Domain
-            services.AddDomainServices();
+            services.AddDomainServices(
+                x =>
+                {
+                    x.RoomCount = 100;
+                }
+            );
 
-            ServiceProvider = services.BuildServiceProvider();
+        ServiceProvider = services.BuildServiceProvider();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -20,7 +20,7 @@ namespace HotelTest.Domain.Entities
         /// Id комнаты
         /// </summary>
         [ForeignKey(nameof(Room))]
-        public uint RoomId { get; set; }
+        public int RoomId { get; set; }
         /// <summary>
         /// Комната
         /// </summary>

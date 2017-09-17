@@ -37,7 +37,7 @@ namespace HotelTest.Domain.Services
             var resultUser = users.SingleOrDefault(x => x.Email == email);
             if (resultUser == null)
             {
-                throw new NullReferenceException($"Такого {email} нету.");
+                throw new NullReferenceException($"Пользователя с таким мылом: {email} нету.");
             }
             var resultHash = _passwordHasher.HashPassword(resultUser, password);
 
