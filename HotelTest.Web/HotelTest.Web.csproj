@@ -24,6 +24,7 @@
     <ProjectReference Include="..\HotelTest.Domain.Entities\HotelTest.Domain.Entities.csproj" />
     <ProjectReference Include="..\HotelTest.Domain\HotelTest.Domain.csproj" />
     <ProjectReference Include="..\HotelTest.Identity\HotelTest.Identity.csproj" />
+    <ProjectReference Include="..\HotelTest.Sms\HotelTest.Sms.csproj" />
   </ItemGroup>
 
 

@@ -141,5 +141,25 @@ namespace HotelTest.Domain.Services
             }
             return resultUser;
         }
+
+        /// <summary>
+        /// Меняет пароль пользователя на новый
+        /// </summary>
+        /// <param name="idUser">ID пользователя, которому надо сменить пароль</param>
+        /// <param name="newPassword">Новый пароль</param>
+        /// <returns></returns>
+        public async Task ResetPassword(Guid idUser, string newPassword)
+        {
+            var resultUser = await _context.Users.SingleOrDefaultAsync(x => x.Id == idUser);
+            if (resultUser == null)
+            {
+                throw new NullReferenceException($"Пользователя с таким id{idUser} нету");
+            }
+
+            var resultPasswordHash = _passwordHasher.HashPassword(resultUser, newPassword);
+            resultUser.PasswordHash = resultPasswordHash;
+
+            await _context.SaveChangesAsync();
+        }
     }
 }

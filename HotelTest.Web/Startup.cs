@@ -3,6 +3,7 @@ using HotelTest.Database;
 using HotelTest.Domain;
 using HotelTest.Domain.Entities;
 using HotelTest.Identity;
+using HotelTest.Sms;
 using HotelTest.Web.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace HotelTest.Web
@@ -47,6 +49,8 @@ namespace HotelTest.Web
                 .AddPasswordValidator<Md5PasswordValidator>()
                 .AddDefaultTokenProviders();
 
+            //services.AddMemoryCache();
+
 
             services.AddMvc(x =>
             {
@@ -68,16 +72,20 @@ namespace HotelTest.Web
                     x.PriceForLux = 5000;
                 }
             );
+            //Добавления смс сервиса
+            services.AddSmsService();
 
-        ServiceProvider = services.BuildServiceProvider();
+            ServiceProvider = services.BuildServiceProvider();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+                loggerFactory.AddDebug();
             }
 
             app.UseAuthentication();

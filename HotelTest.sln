@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.10
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelTest.Web", "HotelTest.Web\HotelTest.Web.csproj", "{89D3B0D3-E45D-4226-9836-6B1680C87899}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelTest.Web", "HotelTest.Web\HotelTest.Web.csproj", "{89D3B0D3-E45D-4226-9836-6B1680C87899}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelTest.Domain.Entities", "HotelTest.Domain.Entities\HotelTest.Domain.Entities.csproj", "{FF973C5C-1237-4A3E-95AF-1E28AF3950FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelTest.Domain.Entities", "HotelTest.Domain.Entities\HotelTest.Domain.Entities.csproj", "{FF973C5C-1237-4A3E-95AF-1E28AF3950FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelTest.Database", "HotelTest.Database\HotelTest.Database.csproj", "{745262C4-0DA4-4713-A391-E97DE0FE566C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelTest.Database", "HotelTest.Database\HotelTest.Database.csproj", "{745262C4-0DA4-4713-A391-E97DE0FE566C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelTest.Identity", "HotelTest.Identity\HotelTest.Identity.csproj", "{1C67722E-22A8-481F-83B9-10A0FCCF88C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelTest.Identity", "HotelTest.Identity\HotelTest.Identity.csproj", "{1C67722E-22A8-481F-83B9-10A0FCCF88C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelTest.Domain", "HotelTest.Domain\HotelTest.Domain.csproj", "{3C6AF302-9628-4744-B2B6-89A7AADBB56A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelTest.Domain", "HotelTest.Domain\HotelTest.Domain.csproj", "{3C6AF302-9628-4744-B2B6-89A7AADBB56A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelTest.Sms", "HotelTest.Sms\HotelTest.Sms.csproj", "{348E0766-8281-4A1A-AF56-B4E5B4DBDF90}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{3C6AF302-9628-4744-B2B6-89A7AADBB56A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C6AF302-9628-4744-B2B6-89A7AADBB56A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C6AF302-9628-4744-B2B6-89A7AADBB56A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{348E0766-8281-4A1A-AF56-B4E5B4DBDF90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{348E0766-8281-4A1A-AF56-B4E5B4DBDF90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{348E0766-8281-4A1A-AF56-B4E5B4DBDF90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{348E0766-8281-4A1A-AF56-B4E5B4DBDF90}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
