@@ -75,17 +75,17 @@ namespace HotelTest.Domain.Entities
         /// <summary>
         /// Создаёт экземпляр класса User 
         /// </summary>
-        /// <param name="userName">Имя пользователя</param>
+        /// <param name="fio">Имя пользователя</param>
         /// <param name="email">Еmail пользователя</param>
         /// <param name="phoneNumber">Номер телефона</param>
         /// <param name="passwordSalt">Cоль для пароля</param>
         /// <param name="passworhHash">Хэш пароля</param>
         /// <param name="role">Роль</param>
-        public User(string userName, string email, string phoneNumber, string passwordSalt, string passworhHash,
+        public User(string fio, string email, string phoneNumber, string passwordSalt, string passworhHash,
             RolesOptions role)
         {
             Id = Guid.NewGuid();
-            Fio = userName;
+            Fio = fio;
             Email = email;
             PhoneNumber = phoneNumber;
             PasswordSalt = passwordSalt;

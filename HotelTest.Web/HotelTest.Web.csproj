@@ -22,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\HotelTest.Database\HotelTest.Database.csproj" />
     <ProjectReference Include="..\HotelTest.Domain.Entities\HotelTest.Domain.Entities.csproj" />
+    <ProjectReference Include="..\HotelTest.Domain\HotelTest.Domain.csproj" />
     <ProjectReference Include="..\HotelTest.Identity\HotelTest.Identity.csproj" />
   </ItemGroup>
 

@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using HotelTest.Database;
+using HotelTest.Domain;
 using HotelTest.Domain.Entities;
 using HotelTest.Identity;
+using HotelTest.Web.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace HotelTest.Web
 {
@@ -38,13 +36,26 @@ namespace HotelTest.Web
             //Сервисы для аутификации и валидации пароля
             services.AddScoped<IHashProvider, Md5HashService>();
             services.AddScoped<IPasswordHasher<User>, Md5PasswordHasher>();
+
             services.AddIdentity<User, Role>()
                 .AddRoleStore<RoleStore>()
                 .AddUserStore<IdentityStore>()
                 .AddPasswordValidator<Md5PasswordValidator>()
                 .AddDefaultTokenProviders();
 
-            services.AddMvc();
+
+            services.AddMvc(x =>
+            {
+                x.Filters.Add<ErrorFilter>();
+            });
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+            });
+
+            //Добавление сервисов из Domain
+            services.AddDomainServices();
 
             ServiceProvider = services.BuildServiceProvider();
         }
@@ -56,8 +67,19 @@ namespace HotelTest.Web
             {
                 app.UseDeveloperExceptionPage();
             }
-            ServiceProvider.GetService<DatabaseContext>().Initializer(ServiceProvider).Wait();
+
+            app.UseAuthentication();
+            app.UseSwagger();
+
+            app.UseSwaggerUI(x =>
+            {
+                x.SwaggerEndpoint("/swagger/v1/swagger.json", "My api");
+            });
             app.UseMvc();
+
+            ServiceProvider.GetService<DatabaseContext>().Database.Migrate();
+            ServiceProvider.GetService<DatabaseContext>().Initializer(ServiceProvider).Wait();
+        
         }
     }
 }
